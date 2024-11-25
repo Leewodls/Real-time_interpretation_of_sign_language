@@ -1,0 +1,283 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <title>Button Event</title>
+    <style>
+        @font-face {
+            font-family: 'BMJUA';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'HakgyoansimBareondotumB';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-2@1.0/HakgyoansimBareondotumB.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+        }
+
+        body {
+            font-family: 'HakgyoansimBareondotumB', sans-serif;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow-x: hidden; /* 가로 스크롤 방지 */
+        }
+
+        .header {
+            width: 100%;
+        }
+
+        .header p {
+            display: inline;
+            font-size: 6vw;
+            color: #81D4FA;
+        }
+
+        .fixed-title {
+            font-family: 'BMJUA', sans-serif;
+            color: black;
+            text-align: center;
+            font-size: 6vw;
+            padding: 4% 0;
+        }
+
+        .main {
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* 가로 중앙 정렬 */
+            align-items: center;     /* 세로 중앙 정렬 */
+            height: 90vh;            /* 부모 요소가 화면의 전체 높이를 차지하도록 설정 */
+            margin-top: 25px;  
+        }
+
+        #myButton {
+            font-family: 'HakgyoansimBareondotumB', sans-serif;
+            width: 85%; /* 너비를 90%로 설정 */
+            height: 5vh; 
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 6vw; /* 폰트 크기 */
+            text-align: center;
+            text-decoration: none; /* 링크 밑줄 제거 */
+            display: inline-block;
+            margin-top: 20%; /* 버튼과 주의사항 사이의 간격 설정 */
+            margin-bottom: 10px; /* 버튼과 주의사항 사이의 간격 설정 */
+        }
+
+        .loading-message {
+    display: none; /* 초기에는 표시되지 않음 */
+    font-size: 5vw;
+    color: red;
+    position: absolute; /* 절대 위치로 설정 */
+    top: 20%; /* 부모 요소의 15위치에 고정 */
+    left: 50%; /* 가로 중앙 정렬 */
+    transform: translate(-50%, -50%); /* 수평 중앙 정렬 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 10; /* 다른 요소들 위에 나타나도록 설정 */
+}
+
+
+        .loading-spinner {
+            font-size: 20vw; /* 스피너를 크게 설정 */
+            animation: spin 1s linear infinite; /* 애니메이션 설정 */
+            margin-bottom: 5%; /* 스피너와 텍스트 사이의 간격 */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .info {
+            font-family: 'HakgyoansimBareondotumB', sans-serif;
+            width: 90%;
+            text-align: center;
+            font-size: 4vw;
+            color: #333;
+        }
+
+        .info h3 {
+            text-align: center;
+            font-size: 5vw;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .info-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            justify-items: center;
+            align-items: center;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-item p {
+    margin: 0; /* 기본 마진 제거 */
+    padding: 0; /* 기본 패딩 제거 */
+}
+
+
+        .info-item img {
+            width: 100%;
+            max-width: 100px;
+            border-radius: 10px;
+            height:100px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #f8f8f8;
+            padding: 5px 0;
+            border-top: 1px solid #ddd;
+            width: 100%;
+            border-radius: 10px;
+            position: fixed; /* 고정 위치 */
+            bottom: 0; /* 하단 */
+            left: 0; /* 왼쪽 경계 */
+            right: 0; /* 오른쪽 경계 */
+            z-index: 1000; /* 다른 요소들 위에 나타나도록 z-index 설정 */
+        }
+
+        .navbar a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .navbar a i {
+            font-size: 20px;
+            margin-bottom: 20%;
+        }
+
+        .navbar a span {
+            display: block;
+            font-size: 15px;
+        }
+
+        .navbar a:hover {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    {% csrf_token %} <!-- CSRF 토큰 추가 -->
+
+    <div class="layout">
+        <div class="header">
+            <div class="fixed-title"><p>수</p>어 <p>번</p>역</div>
+        </div>
+        
+        <div class="main">
+            <!-- 로딩 메시지: 버튼 클릭 전에는 숨겨진 상태 -->
+            <div class="loading-message" id="loadingMessage" style="display: none;">
+                <i class="fas fa-spinner loading-spinner"></i>
+                <span>로딩 중... <br>잠시만 기다려 주세요.<br>(최대 10초 소요)</span>
+            </div>
+            <button id="myButton">번역하기 ></button>
+
+            <div class="info">
+                <h3>< 사용 시 주의사항 ></h3>
+                <div class="info-container">
+                    <div class="info-item">
+                        <img src="{% static 'images/hand.png' %}"alt="손을 천천히 움직이기">
+                        <p>1. 손을 천천히 움직이고 화면에서 벗어나지 않도록 유지해 주세요.</p>
+                    </div>
+                    <div class="info-item">
+                        <img src="{% static 'images/camera.png' %}" alt="카메라 고정">
+                        <p>2. 카메라를 움직이지 말고 고정해 주세요.</p>
+                    </div>
+                    <div class="info-item">
+                        <img src="{% static 'images/background.png' %}" alt="단순한 배경">
+                        <p>3. 배경은 단순한 색상으로 설정해 주세요.</p>
+                    </div>
+                    <div class="info-item">
+                        <img src="{% static 'images/light.png' %}" alt="손 조명">
+                        <p>4. 손이 잘 보이도록 조명을 조절해 주세요.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="navbar">
+        <a href="http://localhost:8080/logout" class="footer-link">
+            <i class="fas fa-sign-out-alt"></i><span>Log Out</span>
+        </a>
+        <a href="http://localhost:8080/home" class="footer-link">
+            <i class="fas fa-home"></i><span>Home</span>
+        </a>
+        <a href="http://localhost:8080/user/mypage" class="footer-link">
+            <i class="fas fa-user"></i><span>My Page</span>
+        </a>
+    </div>
+    
+
+    <script>
+        // Django CSRF 토큰을 JavaScript에서 가져옴
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        document.getElementById("myButton").addEventListener("click", function() {
+            // 버튼 클릭 시 로딩 메시지를 보이게 함
+            const loadingMessage = document.getElementById("loadingMessage");
+            loadingMessage.style.display = "flex";  // 로딩 메시지를 보이게 설정
+            document.getElementById("myButton").disabled = true;  // 버튼 비활성화
+
+            // POST 요청 시작
+            fetch('/ready/', { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    window.location.href = "/"; // index 페이지로 리다이렉트
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            })
+            .finally(() => {
+                // 요청이 완료된 후 로딩 메시지를 숨기고 버튼을 다시 활성화함
+                loadingMessage.style.display = "none";
+                document.getElementById("myButton").disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
