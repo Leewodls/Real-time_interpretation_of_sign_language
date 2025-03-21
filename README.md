@@ -3,8 +3,6 @@
 
 [수어_발표자료.pptx](https://github.com/user-attachments/files/17903358/_.pptx)
 
-#
-<img width="591" alt="스크린샷 2024-11-25 오후 10 11 56" src="https://github.com/user-attachments/assets/a4603dac-99ca-4e36-93c7-99a3bc008998">
 
 #
 <img width="855" alt="스크린샷 2024-11-25 오후 10 10 27" src="https://github.com/user-attachments/assets/6eeacc86-cd7a-435d-9705-16130e570c8a">
